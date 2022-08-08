@@ -1,0 +1,112 @@
+---
+# JSON does not allow comments
+
+elements-primitives: 
+  -numbers
+  -strings
+  -booleans
+  -null
+
+Lists(arrays): 
+  - [1, 2, 3, 4, 5]
+  - [“This is a first string”, “This is a second string”]
+
+Objects(hashtables, key-value pairs, dictionaries): 
+  - {"name": “Homer”, “favouriteFood”: “donuts”}
+  - {“brand”: “Fiat”, “model-no”: “500”}
+
+List of objects: 
+  [
+    {"title": "beverage", "name": "coffee", "cost": "2.50"},
+    {"title": "beverage", "name": "water", "cost": "0"},
+    {"title": "snack", "name": "cookie", "cost": "1.75"}
+  ]
+
+#possible, but not a great idea
+List with mixed types:
+  [
+    {"type": "beverage", "name": "coffee", "cost": "2.50"},
+    {"type": "beverage", "name": "water", "cost": "0"},
+    "Wilhemstr. 19, 72072, Tuebingen",
+    null
+  ]
+
+Objects composed of nested objects:
+  {"lunchMenu":
+    [ {
+      "beverage": {"name": "wine"},
+      "meal": {"name": "lasagna", "isVegetarian": true}
+    },
+    {
+      "beverage": {"name": "cola"},
+      "meal": {"name": "hamburger", "isVegetarian": false}
+    } ]
+  }
+
+Usages:
+  -browser
+  -virtually every programming language:
+    java: Gson library
+    python: import json
+  -node
+  -databases (MongoDB)
+  -unix command-line
+
+Gson library example:
+Gson gson = new Gson();
+String str = "{\"type\":\"sentence\", \"text\": \"It's a rainy day.\"}";
+Sentence sent = gson.fromJson(str, Sentence.class);
+sent.text = "It's a sunny day.";
+String jsonString = gson.toJson(sent);
+
+Python example:
+import json
+str = """{"type":"sentence", "text": "It's a rainy day."}"""
+sent = json.loads(str)
+sent.text = "It's a sunny day."
+jsonString = json.dumps(sent)
+
+Node.js example:
+// Use JSON natively
+var sent = {"type":"sentence", "text": "It's a rainy day."};
+sent.text = "It's a sunny day.";
+var jsonString = JSON.stringify(sent);
+// Also parse from string (like Java and Python above)
+var sentFromString = JSON.parse(jsonString);
+# javascript-based runtime
+# derived from chrome's Javascript engine
+# comparable to python interpreter (but asynchronous)
+
+MongoDB example:
+//data is stored as collections of JSON documents
+{species: "dog", color: "golden", name: "Rufus"},
+{species: "cat", color: "tabby", name: "Marbles"},
+{species: "dog", color: "black-and-white", name: "Mollie"},
+...
+//Querying takes place in Javascript
+db.pets.find({color:"golden"})
+
+Unix command-line:
+  -jo: “a small utility to create JSON objects”
+  -jq: “like sed for JSON data”
+
+jq:
+# use jq to pretty-print contents
+cat phrasal_verbs_db.json | ./jq
+# Restructuring key-value pairs for easier work
+cat phrasal_verbs_db.json | ./jq 'to_entries'
+# print keys
+cat phrasal_verbs_db.json | ./jq 'to_entries[] | .key'
+# print value of the key "descriptions" in every value of the entry
+cat phrasal_verbs_db.json | \
+  ./jq ' to_entries[] | .value.descriptions '
+#select all keys of the entries whose keys begin with ”fi”
+cat phrasal_verbs_db.json | \
+  ./jq 'to_entries[] | select(.key | startswith("fi")) | .key'
+#assignment: use jq and tr to filter out unnecessary text
+cat my_fun_fact.json | ./jq ' to_entries[] | select(.value.ignore=='false') | .value.text' | tr "\n" " " | tr -d '"'
+
+jo:
+#assignment: create a json file
+jia@jia-HP-255-G8-Notebook-PC:~/jo-1.6$ ./jo -p username=jia password=test123 factNo=fun_fact_3 > args.json
+...

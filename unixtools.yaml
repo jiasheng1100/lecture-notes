@@ -1,0 +1,414 @@
+basic commands:
+pwd: print working directory
+exit: log out of terminal
+which <command>: where to find command (e.g. which python3)
+cd [path]: change directory
+ls [path]: list the file system
+ls -a: list all files (also hidden ones)
+ls -l: print the results in the form of a list
+ls -al: combination of -a and -l
+mkdir [file]: create directory
+touch [file]: create an empty file
+rm [path]: remove file
+rm -r [path]: remove directory
+mv [file] [file]: move file/rename file
+cp [file] [file]: copy file
+echo: display texts or vairables
+man [command]: get manual page expaining the command (q to quit)
+tree [path]: show files in the path in a tree structure
+echo: can be used to add or append lines to file, e.g. echo "Hello" > temp.txt
+
+
+xxd [file]: display the hexadecimal representation of any file
+  xxd -b [file]: display binary representation
+file [file]: check the encoding of a file
+
+TAB key: autocompletion of commands
+
+file system:
+  -hierachical structure
+  -structureless files (all files treated equally as byte arrays)
+  -case-sensitive names
+
+directories:
+.: itselft
+..: parent
+~: user's home directory
+/: root of file system
+
+variables:
+echo $VARNAME: get the value of a variable
+PATH : command search path
+HOME : home directory
+USER : current user
+fileCount=3: assign value 3 to variable fileCount
+echo $fileCount: prints 3
+
+streams: 
+standard input: where program reads from (default; keyboard)
+standard output: where program writes to (default; screen/terminal)
+standard error: where errors are logged (default; screen/terminal)
+> [path] : writes standard output to a file
+>> [path] : appends standard output to a file
+< [path] : redirects standard input to a file (read from there)
+|: chain commands, output of one command as input of another command
+
+server:
+ssh yourname@hostname.de: connect to a server
+scp myfile myname@hostname.de:/home/myname/documents/: copy to server
+scp myname@hostname.de:/home/myname/documents/myfile .: copy from server
+
+processes:
+ps (for own user)/ps -aux (for all processes): get list of all processes
+top:  for real-time list of processes and memory usage
+kill [pid]: kill a process
+
+-------------------------------------------------------------------
+head:
+#prints the beginning parts of file
+no option: the first 10 lines
+-n [positive number]: first [positive number] lines
+-n [negative number]: all lines except the last [negative number] lines
+-q : quiet mode, does not show file names if it prints multiple files
+
+------------------------------------------------------------------
+tail:
+#prints the final parts of file
+no option: the last 10 lines
+-n [number]: the last [number] of lines
+-n +[number]: starting from [number] to end of file
+-q: quiet mode, does not show file names if it prints multiple files
+-f: follow, check constantly and output new contents if file is updated
+
+------------------------------------------------------------------
+less, more:
+#display text streams, less is faster
+moving commands: j, k, CTRL+f, CTRL+b, SPACE, d, u
+searching commands: /pattern, n, N
+jumping commands: g, G, [line number]G
+changing files: :n, :p, :e [file name]
+
+------------------------------------------------------------------
+wc:
+wc -m: number of characters
+wc -c: number of bytes
+wc -l: number of lines
+wc -w: number of words
+
+------------------------------------------------------------------
+diff:
+diff file1.txt file2.txt
+2,4c2,4: lines 2 to 4 from file1.txt changed to lines 2 to 4 in file2.txt
+lines starting with ‘<’: affected lines from file1.txt
+‘- - -’: file separator
+lines starting with ‘>’: affected lines from file2.txt
+
+-c: output in context mode
+!,+,-: lines to be changed, added, or deleted
+Use option -u for unified mode, which does not show redundant information
+
+------------------------------------------------------------------
+grep:
+grep "some string" file-to-search.txt
+-n: to print matching line numbers
+-v: for inverted matching (every line without the pattern)
+-c: to count the number of matched lines
+-i: for case-insensitive matching
+--colour: for color highlighting of matches
+
+-G: implements Basic Regular Expression (BRE)
+-E: implements Extended Regular Expression (ERE)
+-P: implements Perl-Compatible Regular Expression (PCRE)
+
+------------------------------------------------------------------
+regex:
+/re/: standard
+/re/g: global
+/re/i: case-insensitive
+/re/m: multiline
+/re/s: single-line(dot-matches-all)
+
+wildcard symbol .: matches any character except the new-line character
+
+Square brackets [ ]: matches only one character in the set
+/[A-Z]/: [ABCDEFGHIJKLMNOPQRSTUVWXYZ]
+/[0-9]/: [0123456789]
+/[A-Za-z]/
+/[^aeiou]/: matches any consonant (non-vowel)
+
+escaping necessary for ] - ^ \
+
+\d: digits (= [0-9])
+\w: word characters (= [a-zA-Z0-9 ])
+\s: whitespace [ \t\r\n]
+\D: not digit [ˆ0-9]
+\W: not word character [ˆa-zA-Z0-9 ]
+\S: not whitespace [ˆ \t\r\n]
+
+*: for zero or more repetitions
++: for at least one repetition
+?: for optional items (0 or 1 repetition)
+
+\d{4,8}: for 4-digit to 8-digit numbers
+\d{4}: for exactly 4 digits
+\d{4,}: for at least 4 digits
+
+/(abc)+/: matches “abc” and “abcabcabc”
+/(in)?dependent/: matches “independent” and “dependent”
+
+/apple(juice|sauce)/: matches "applejuice" and "applesauce"
+
+line boundaries (0-length):
+^: for the start of a line or the entire string
+$: for the end of a line or the entire string
+/ˆapple/: matches lines beginning with “apple”
+/ˆapple$/: matches whole lines only with “apple” on them
+
+word boundaries (0-length):
+\b: matches a word boundary (start or end of word)
+\B: matches positions where ther is no word boundary
+/\b\w+\b/: finds 4 matches in “This is a test.”
+
+Backreferences:
+/a(p{2}l)e/: matches “apple” and stores “ppl” under \1
+
+#commonly used regex
+/ˆ[a-z0-9 -]{3,16}$/: checking a username
+/(https?:\/\/)[-a-zA-Z0-9@:%. \+ #=]{2,256}\.[a-z]{2,6}\b([-a-
+zA-Z0-9@:% \+. #?&\/=]*)/: matching a URL
+/ˆ(0?[1-9]|1[012])[-/.](0?[1-9]|[12][0-9]|3[01])[-/.]((19|20)[0-9]{2})$/: Calendar date in MM/DD/YYYY
+/ˆ(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@!%*?&])[A-Za-z\d$@!%*?&]{8,}$/: password strength
+------------------------------------------------------------------
+Bash script:
+#!/bin/bash
+#convert all txt files in folder task2_2 to ISO standard
+for e in ./task2_2/*.txt; do
+	new=$e"_new.txt"
+	iconv -t ISO-8859-1 <$e> $new 
+done 
+
+#!/bin/bash
+#A simple Bash script that takes a directory as an argument
+
+#careful! the punctuation that surrounds ls $DIR is not '', but ``
+DIR=$1
+for i in `ls $DIR`;
+do
+    echo "This dir contains:" $i
+done
+
+hmod u+x example.sh: make the file executable
+bash example.sh .: run file in command line
+
+---------------------------------------------------------------------
+cat:
+#concatenates multiple files into one file
+cat <file1> <file2> ... > new_file
+-n: number all lines
+-b: number all lines except blank lines
+the tac command prints the lines in the files in reverse order
+
+------------------------------------------------------------------
+cut:
+#used to extract a part of each line
+#useful for working with tabular data files
+cut -f 1 table.csv: extracts the first column
+cut -f 1,5 table.csv: extracts columns 1 and 5
+cut -f 1-5 table.csv: extracts columns 1 through 5
+cut -d ; -f 1,3 /etc/passwd: uses the semicolon as a delimiter
+
+------------------------------------------------------------------
+tr:
+#to translate, compress or delete characters
+#operate on standard input: cat file | tr ....
+tr [OPTION] SET1 [SET2]
+tr '[a-z]' '[A-Z]': convert lower case to upper case
+tr [:lower:] [:upper:]: convert lower case to upper case
+tr ' ' '\t': translate white-space to tabs
+tr -s [:space:]: compress whitespace
+
+------------------------------------------------------------------
+sort:
+#sort lines in files (multiple file sorting supported)
+sort langs.txt: alphabetical order
+sort -r langs.txt: reverse ordercat 
+cat langs.txt | sort: can also take standard input
+sort -t ; -k 4 -k 1 -g /etc/passwd:
+  -t: column separator
+  -k: which column to sort by
+  -g: sort by numeric value instead of character
+
+-----------------------------------------------------------------
+uniq:
+#eliminate duplicate entries, but only checks adjacent lines
+uniq duplicate.txt: eliminate duplicate entries of adjacent lines
+sort duplicate.txt | uniq: sort before uniq
+sort duplicate.txt | uniq -c: also count occurrences
+sort duplicate.txt | uniq -cu: show only unique lines
+sort duplicate.txt | uniq -cd: show only duplicate lines
+
+-----------------------------------------------------------------
+aspell:
+aspell check spell.txt: check spelling interactively
+aspell list < spelling.txt: list misspelled words from stdin
+
+-----------------------------------------------------------------
+nl:
+nl table.csv: add line numbers to text
+nl -v0 table.csv: add line numbers starting from 0
+nl -nrz table.csv: -n [number format; ln, rn, rz]
+nl -w8 table.csv: -w [number]; number width
+
+-----------------------------------------------------------------
+fmt:
+#reformat text files
+fmt -w 50 unformatted.txt: format text with set width
+fmt -u unformatted.txt: format with uniform space (one space between words and two between sentences)
+
+------------------------------------------------------------------
+join:
+#join lines in two files on a common field. Requires sorted files.
+sort -k 1b,1 join1.txt >join1.sorted
+sort -k 1b,1 join2.txt >join2.sorted
+join join1.sorted join2.sorted >joined.txt
+#"info join" to learn more about the join command’s options.
+
+------------------------------------------------------------------
+unix2dos, dos2unix:
+#convert between newline styles of Windows files and Unix files
+unix2dos file.txt: default mode, overwriting original file
+unix2dos -n old-file.txt new-file.txt: new file mode, writing to new file
+
+------------------------------------------------------------------
+recode:
+recode -f ..ascii < utf8.txt > ascii.txt
+-f: force recoding even if it is irreversible
+
+------------------------------------------------------------------
+iconv:
+iconv -c -f utf8 -t ascii < utf8.txt > ascii.txt
+-f: from codeset
+-t: to codeset
+-c: omit invalid code
+
+-------------------------------------------------------------------
+wget:
+#access text on the web
+wget http://example.com/article.html
+#getting sequentially numbered files
+wget http://example.com/images/{1..20}.jpg
+#getting multiple files from a list of URLs
+wget --input list-of-file-urls.txt
+
+wget --mirror -p --convert-links -P ./local-folder website-to-mirror.com
+--mirror: turn on mirroring options
+-p: page requisites, download all the files necessary to correctly display a page
+--convert-links: convert links for local viewing
+-P: the local folder where the crawled website would be stored
+
+------------------------------------------------------------------
+ed:
+5,9m$: moves lines 5-9 to the end of the file
+g/NOTE/d: deletes all lines that start with "NOTE"
+
+-------------------------------------------------------------------
+vi:
+a switches to insert mode after the cursor
+x deletes the symbol at the cursor
+/re searches for a regex patter re
+:w saves your changes
+:q quits
+:q! quits without saving changes
+:wq saves your changes and quits
+
+-------------------------------------------------------------------
+sed: 
+syntax: sed [<options>] '[<address>]<command>'[<filename>]
+options:
+  -e <scriptfile>: for loading commands from a text file
+  -i: to edit files in place (dangerous!)
+  -n: to suppress output of unchanged lines
+  -r: to use extended regular expressions
+commands:
+  sed 'y/te/di/': transform t to d and e to i
+
+  sed 's/Peter/Luke/': substitute 1st Peter in each line with Luke
+  sed 's/Peter/Luke/g': substitute all Peter in each line with Luke
+  sed 's/Peter/Luke/2': substitute 2nd Peter in each line with Luke
+  sed '3 s/Peter/Luke/': substitute 1st Peter in 3rd line
+  sed '1,3 s/Peter/Luke/': substitute 1st Peter 1st to 3rd line
+  sed '3,$ s/Peter/Luke/': substitute 1st Peter starting 3rd line
+  sed 's/Peter/Luke/p': replace and duplicate replaced lines
+
+  sed '/Rosie/d' peter.txt: deletes line with “Rosie”
+  sed '3d' peter.txt: deletes third line
+  sed '$d' peter.txt: deletes last line
+  sed '3,5d' peter.txt: deletes 3rd to 5th line
+  sed '32d' peter.txt: deletes 3rd and then every 2nd line
+  sed '/\/\//, /-->/d' easy-texts1.txt: delete all content that starts with // and ends with --> (javascript code)
+
+  sed G peter.txt: add 1 blank line after each line
+  sed '/Rosie/G' peter.txt: appends a blank line to line with “Rosie”
+
+  #combine commands with ;
+  sed 'G;G' peter.txt: add 2 blank lines after each line
+  sed '/ ̂ $/d;G' peter.tx: Delete all blank lines and add a black line
+
+  sed = peter.txt: number the lines
+  sed = peter.txt | sed 'N;s/\n/\t/': pretty line numbering
+
+  sed -n '2,5p' peter.txt: prints the 2nd to 5th line
+  sed -n /Rosie/p peter.txt: prints lines with “Rosie”
+  sed '2,4d' peter.txt: prints entire file except lines 2-4
+  
+--------------------------------------------------------------------
+awk:
+syntax:
+awk '
+BEGIN { <begin_command1>; <begin_command2>; ...}
+<condition1> { <command11>; <command12>; ... }
+<condition2> { <command21>; <command22>; ... }
+...
+END { <end_command1>; <end_command2>; ...}
+'
+
+BEGIN and END blocks are optional
+<condition> can be empty, -> "applies to all lines"
+<command> has access to the contents of the line
+
+awk 
+'BEGIN { print "Analysis of subject occurrences:"}
+$8∼/SB/ { ++n }
+{ ++m }
+END { print "'SB' appears in",n,"/",m,"lines." }'
+creg109.conll 
+
+$0: refers to the entire line (record)
+$8: refers to the eighth field in the line (record)
+
+awk -F "\t": set tab to be default field separator
+BEGIN { FS = ","; OFS = "\t"}: parse comma-separated values, but store in tab-separated format
+
+variables:
+  concatenated as strings by space: "Hello " "World!" = "Hello World!"
+  -FS: string separating fields in the input (can be a regex)
+  -OFS: string separating fields in the output
+  -RS: single character separating records in the input
+  -ORS: single character separating records in the output
+  -NR: auto-updated to the number of records (lines) processed so far
+  -NF: auto-updated to the number of fields in the current record (line)
+
+to match lines:
+$5 ∼ /MA/: “if the fifth field contains MA”
+==: both string and number equality
+<, <=, >: other comparison operators
+!∼: negated equivalent of ~
+NR > 1 && NF = n { <action> }: perform action if we are not in the first line, and the number of fields is n (e.g. the expected number of columns)
+
+awk -F "\t" '{print $3, $1, $2}': reordering columns in a TSV file
+awk '/^$/ { x++ } END { print x}': counting blank lines in a file
+awk 'NR > 1 { sum += $4 } END { print sum / NR}': print average of numbers in the 4th column, except first line
+awk '{out = out $1 " "} END {print out}': merge contents of first column into a single string
+
+awk '$1 ~ /^un.+lich$/ {print $1}' subtlex-de.csv: print all words in the first column of sebtlex-de.csv that starts with un and ends with lich
+awk 'length($1) > 25 {print $1, length($1)}' subtlex-de.csv: same as above, print all words that are longer than 25 and their length

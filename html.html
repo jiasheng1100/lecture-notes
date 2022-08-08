@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <!-- contains meta info such as page name and description -->
+  <meta charset="UTF-8">
+  <meta name="description" content="Notes">
+  <meta name="keywords" content="HTML,Header,Structure,CSS">
+  <meta name="author" content="Jia Sheng">
+  <title>HTML Notes</title>
+
+  <!-- allows to link and define JavaScript code -->
+  <script type="text/javascript">
+  function myclick(astr) {
+  console.log("click detected");
+  alert(astr);
+  }
+  </script>
+ </head>
+
+ <body>
+  <h1>HTML: Hypertext Markup Language</h1>
+
+  <!-- hypertext: anchors linked to other documents -->
+  <!-- target: self (default, same window), blank (new tab/window) -->
+  <!-- <a href="#contact"> to jump to element in this document with id="contact" -->
+  <a href="www.example.com/text.html" target="_blank">absolute link</a>
+  <a href="CV/CV.html">relative link</a>
+
+ <pre>
+ pre often used for displaying code
+ fixed-width looks different from rest of the document
+ </pre>
+
+ <p>
+ paragraph element p<br>
+ line breaks expressed with br tag<br>
+ otherwise space inside paragraph ignored ("poem problem")<br>
+ space added before and after paragraph in browser<br>
+ </p>
+
+ spans can be used for adding <span style="background-color:red;">inline styles</span>
+
+ <ul>
+  <li>unordered lists</li>
+  <li>with ul tag</li>
+  <li>bullets points</li>
+  <li>each item with li tag</li>
+ </ul>
+
+ <ol>
+  <li>ordered lists</li>
+  <li>with ol tag</li>
+  <li>enumerations</li>
+  <li>each item with li tag</li>
+ </ol>
+
+ <table>
+  <tr>
+  <th>table</th>
+  <th>display tabular data</th>
+  <tr>
+  <tr>
+  <td>tr</td>
+  <td>table row</td>
+  <tr>
+  <tr>
+  <td>th</td>
+  <td>table heading cell</td>
+  <tr>
+  <tr>
+  <td>td</td>
+  <td>table data cell</td>
+  <tr>
+  <tr>
+  <td>td rowspan="2"</td>
+  <td>cell spanning 2 rows</td>
+  <tr>
+  <td>td colspan="2"</td>
+  <td>cell spanning 2 columns</td>
+  <tr>
+ </table>
+ <br>
+ img link to embed images on same machine or different server<br>
+ <img src="html.png" alt="alt attribute with text in case image cannot be displayed"> <br>
+ source: https://www.pinterest.com/pin/inteligncia-artificial-on-twitter--660621839078633000/<br>
+<br>
+
+ button: 
+ <ul>
+  <li>clickable element</li>
+  <li>sometimes replaced by elements with less
+stylistic predefinition in modern web design in modern web design</li>
+  <li>only useful when associated with JavaScript function for click handling</li>
+ </ul>
+ <button type="button" onclick="myclick(’Thanks!’)">Click Me!</button>
+ </body>
+</html>

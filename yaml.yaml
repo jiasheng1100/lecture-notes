@@ -1,0 +1,129 @@
+# use yamllint to validate yaml files
+# command line: yamllint demo.yaml
+
+# data types in yaml
+# comment
+# booleans
+true
+false
+True
+False
+
+# numbers
+121
+3.14159
+
+# strings
+"string"
+"A slightly longer string."
+
+# null
+null
+
+# Lists
+# JSON-style in-line declarations
+fruit: ["apple", "banana", "pear"]
+# Block-style declarations
+vegetables:
+  - "cucumber"
+  - "carrots"
+  - "bell peppers"
+
+# ymal collections
+# indentations encode structure
+characters:
+  numbers:
+    - 99
+    - 34
+  letters:
+    lower:
+      - a
+      - b
+    upper:
+      - A
+      - B
+
+# key-value pairs
+# JSON-style in-line
+fruitPrices: {apple: 1.50, banana: 0.50, pear: 2.50}
+# Block-style
+body:
+  head:
+    eyes: green
+    hair: black
+    wearsGlasses: false
+
+# different ways to declare strings
+aStringWithTwoLines: "This is line 1.\nThis is line 2."
+# literal style
+aStringWithNewlinesPreserved: |
+This is the start of a line,
+but it is not the end of it, and even though it definitely looks
+like it, this all belows to one line.
+# folded style
+aStringWithNewlinesIgnored: >
+This is the start of a line,
+but it is not the end of it, and even though it definitely looks
+like it, this all belows to one line.
+
+# less common scalar data types
+# Hex notation (0x12d4)
+# Octal notation (023332)
+# Scientific notation (12.3015e+05)
+# Non-numbers: Infinity, -Infinity, NAN
+# Timestamps: 2001-12-14t21:59:43.10-05:00
+# Dates: 2002-12-14
+
+# Three ‘-’ characters signal the start of a YAML document,
+---
+courses:
+- title: Text Technology
+module: ASW-BA-03
+- title: Vector space semantics
+module: ASW-BA-08
+# and three ‘.’ characters and a newline signal the end
+...
+
+# multiple ymal documents within the same file
+# German
+---
+lang: "DE"
+courses:
+  - modultitel: Einfhrungsmodul Computerlinguistik
+    modulnummer: ISCL-BA-01
+  - modultitel: Symbolische Computerlinguistik: Texttechnology
+    modunummer: ISCL-BA-05
+...
+# English
+---
+lang: "EN"
+courses:
+  - title: Introductory module: Computational Linguistics
+    module: ISCL-BA-01
+  - title: Symbolic Computational linguistics: Text Technology
+    module: ISCL-BA-05
+...
+
+# reuse existing yaml data with aliases
+---
+courses:
+  - &course1
+    title: Text Technology
+    module: ASW-BA-03
+  - &course2
+    title: Vector space semantics
+    module: ASW-BA-08
+schedule:
+  - day_of_week: Monday
+    course: *course1
+  - day_of_week: Tuesday
+    course: *course1
+  - day_of_week: Thursday
+    course: *course2
+...
+
+---
+# documentation: https://yaml.org/spec/1.2.2/
+# usage: configuration files, cloud computing(Docker, Kubernetes)
+# automated build pipelines(GitLab), web applications(Web frameworks)
+...

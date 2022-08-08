@@ -1,0 +1,79 @@
+---
+XML (Extensible Markup Language)
+
+#should always start with a XML declaration
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+#XML Specification: elements
+<course>
+  Text Technology
+</course>
+
+#empty elements
+<course/>
+
+#attributes: key-value pair
+<text author="bjoern" date_written = ’2017-06-08’>
+The course ...
+</text>
+#whitespace around equals sign arbitrary, whitespace in values allowed
+#attribute keys/names unique in one element
+#order of attributes arbitrary/irrelevant
+
+#special characters -> encoded as entities
+<: &It;
+>: &gt;
+&: &amp;
+""": &quot;
+'': &apos;
+
+#comments allowed, not part of the content but meta information
+begin of comment: <!--
+end of comment: -->
+<!-- This example is getting old -->
+<text>The course Text Technology ...</text>
+
+#processing instructions (PIs) can carry scripts for the application processing the XML document
+#syntax: <? script?>
+<?xml-stylesheet type="text/css" href="mystyle.css"?>
+
+well-formed: adhere to the XML rules/syntax
+validity: the semantics defined by the user
+
+test well-formedness: https://www.w3schools.com/xml/xml_validator.asp
+test validity: DTD (Document Type Definition) or XML schema
+
+#distinguish different elements of same name with prefixes
+<h:table>
+  <h:tr xmlns:h="http://www.w3.org/TR/html4/">
+    <h:td>Apples</h:td>
+    <h:td>Bananas</h:td>
+  </h:tr>
+</h:table>
+<f:table xmlns:f="https://www.w3schools.com/furniture">
+  <f:name>African Coffee Table</f:name>
+  <f:width>80</f:width>
+  <f:length>120</f:length>
+</f:table>
+Important: must define a namespace for each prefix, by convention use xmlns for this, e.g. xmlns:prefix=”URI”
+#URI = Uniform Resource Identifier to identify internet resources
+#An URL (uniform resource locator) is a form of URI
+#URIs are unique names, they are not parsed for information
+#but in real life, they will often contain relevant information
+
+#Use a namespace declared in root element for all child elements to avoid redundancy
+<root xmlns:h="http://www.w3.org/TR/html4/"
+xmlns:f="https://www.w3schools.com/furniture">
+<h:table>
+  <h:tr>
+    <h:td>Apples</h:td>
+    <h:td>Bananas</h:td>
+  </h:tr>
+</h:table>
+<f:table>
+  <f:name>African Coffee Table</f:name>
+  <f:width>80</f:width>
+  <f:length>120</f:length>
+</f:table>
+</root>
+

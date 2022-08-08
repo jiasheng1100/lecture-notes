@@ -1,0 +1,1660 @@
+----------------Binary trees-----------------------------------
+
+----Build up a Binary Tree
+
+BinaryTree<String> b = new BinaryTree<String>("B");
+BinaryTree<String> d = new BinaryTree<String>("D");
+BinaryTree<String> c = new BinaryTree<String>("C", d, null);
+BinaryTree<String> a = new BinaryTree<String>("A", b, c);
+
+
+----BinaryTreeNode<T> constructors
+
+public class BinaryTreeNode<T> {
+T element;
+BinaryTreeNode<T> left;
+BinaryTreeNode<T> right;
+
+public BinaryTreeNode(T dataObj) {
+element = dataObj;
+left = right = null;
+}
+
+public BinaryTreeNode(T dataObj,
+BinaryTreeNode<T> l,
+BinaryTreeNode<T> r) {
+element = dataObj;
+left = l;
+right = r;
+}
+
+public String toString() {
+return element.toString();
+}
+
+public boolean isLeaf() {
+return (left == null && right == null);
+}
+}
+
+
+----BinaryTree class
+
+public class BinaryTree<T> {
+BinaryTreeNode<T> root;
+
+public BinaryTree() {
+root = null;
+}
+
+public BinaryTree(T element) {
+root = new BinaryTreeNode<T> (element);
+}
+
+public BinaryTree(T element, BinaryTree<T> leftSubtree,
+BinaryTree<T> rightSubtree) {
+root = new BinaryTreeNode<T> (element);
+if (leftSubtree != null) {
+root.left = leftSubtree.root;
+} else {
+root.left = null;
+}
+if (rightSubtree != null) {
+root.right = rightSubtree.root;
+} else {
+root.right = null;
+}
+}
+}
+
+
+----Mirror Helper method
+/*
+     * Helper mirror method.
+     */
+    private void mirror(BinaryNode<T> node) {
+        if (node == null) {
+            return;
+        }
+        
+        // mirror left and right subtrees
+        mirror(node.getLeftChild());
+        mirror(node.getRightChild());
+        
+        // swap left and right subtrees
+        BinaryNode<T> tmp = node.getLeftChild();
+        node.setLeftChild(node.getRightChild());
+        node.setRightChild(tmp);
+    }
+
+
+----Helper method toString
+
+/*
+     * Helper method for toString
+     */
+    private String toString(BinaryNode<T> top) {
+        String rval = "";
+        
+        if (top == null) {
+            return rval;
+        } else if (top.isLeaf()) {
+            // It's a leaf. Just add the element to the string
+            rval += " " + top.toString();
+        } else {
+            // It's an internal node. Add a left parenthesis,
+            // then the children (left then right),
+            // then the right parenthesis
+            rval += " [" + top.toString();
+            if (top.hasLeftChild()) {
+                rval += " " + toString(top.getLeftChild());
+            }
+            if (top.hasRightChild()) {
+                rval += " " + toString(top.getRightChild());
+            }
+            rval += "]";
+        }
+        
+        return rval.trim().replace(" ]", "]");
+    }
+
+----Level order Tree traversal
+
+Create queue aQueue
+Add root node to aQueue
+While aQueue is not empty
+Get node from queue into aNode
+Do something with aNode
+If exists add left child of aNode to aQueue
+If exists add right child of aNode to aQueue
+
+
+-----------------Dynamic Data Structures and Generics-------------------
+
+----Comparable<T> Interface
+
+The Comparable<T> interface is defned in the java standard class library.
+It contains one method, compareTo, which takes an object as parameter and returns an integer
+e.g.: int result = obj1.compareTo(obj2);
+The intention of this interface is to provide a common way to compare one object to another
+The integer that is returned should be negative if obj1 is less than obj2, 0 if they are equal, and positive if obj1 is greater than obj2
+The String class implements this interface
+
+
+----List<T> Interface
+
+add, contains, get, indexOf, remove, set, size, etc.
+The ArrayList class implements this interface
+
+
+----ArrayLists
+
+import java.util.*;
+ArrayList<String> list = new ArrayList<String>(50);
+
+list.add(new Word(“the”));
+list.add(new Word(“dog”));
+list.add(new Word(“bites”));
+Word aWord = list.get(1); // dog
+list.add(1, new Word(“vicious”));
+list.remove(1);
+list.remove(new Word(“children”));
+boolean dogFound = list.contains(new Word(“dog”)); // true
+int dogIndex = list.indexOf(new Word(“dog”)); // dogIndex index 1
+if (dogIndex >= 0) {
+list.set(dogIndex, new Word(“cat”)); //replace dog with cat
+}
+
+public static ArrayList<String> arrayToArrayList(String[] s) {
+ArrayList<String> result = new ArrayList<String>(s.length);
+for (int i=0; i < s.length; i++) {
+result.add(s[i]);
+}
+return result;
+}
+
+public static void
+removeFromArrayList(ArrayList<String> list, String s) {
+int foundAtIndex = list.indexOf(s);
+while (foundAtIndex >= 0) {
+list.remove(foundAtIndex);
+foundAtIndex = list.indexOf(s);
+}
+}
+
+
+----Collection interface
+ArrayList is a collection class
+a special for-loop syntax
+
+//we say: “for each String element in list”
+for (String element : list) {
+System.out.println(element);
+}
+
+
+----LinkedList
+
+public void addANodeToStart(String addData)
+head = new ListNode(addData, head);
+}
+
+public int length() {
+int count = 0;
+ListNode position = head;
+while (position != null) {
+count++;
+position = position.getLink();
+}
+return count;
+}
+
+public void deleteHeadNode() {
+if (head != null) {
+head = head.getLink();
+} else {
+throw new NullPointerException(“Deleting from empty list”);
+}
+}
+
+
+public void showList() {
+ListNode position = head;
+while (position != null) {
+System.out.println(position.getData());
+position = position.getLink();
+}
+}
+
+//fix the privacy leaks of getLink method by making the class ListNode a private inner class
+public class OuterClass {
+// OuterClass instance variables
+// OuterClass methods
+private class InnerClass {
+// InnerClass instance variables
+// InnerClass methods
+}
+}
+
+----StringLinkedListWithIterator
+
+private ListNode current;
+private ListNode previous;
+
+public void resetIteration() {
+current = head;
+previous = null;
+}
+
+public void goToNext() {
+if (current != null) {
+previous = current;
+current = current.link;
+} else if (head != null) {
+throw new LinkedListException(“Iterated too many times “ +
+“or uninitialized iteration”);
+} else {
+throw new LinkedListException(“Iterating empty list”);
+}
+}
+
+public void deleteCurrentNode() {
+if ((current != null) && (previous != null)) {
+previous.link = current.link;
+current = current.link;
+} else if ((current != null) && (previous == null)) {
+head = current.link;
+current = head;
+} else {
+throw new LinkedListException(“Deleting uninitialized “ +
+“current or list is empty”);
+}
+}
+
+public void insertNodeAfterCurrent(String newData) {
+ListNode newNode = new ListNode(newData, null);
+if (current != null) {
+newNode.link = current.link;
+current.link = newNode;
+} else if (head != null) {
+throw new LinkedListException(“Inserting when iterator is “ +
+“past all nodes or uninitialized iterator”);
+} else {
+throw new LinkedListException(“Using insertNodeAfterCurrent “ +
+“with empty list”);
+}
+}
+
+
+----Doubly Linked Lists
+
+private class ListNode {
+private String data;
+private ListNode next;
+private ListNode prev;
+...
+}
+
+
+----Selftest CircularlyLinkedList
+
+/**
+ A class to store and manipulate generic circularly linked lists
+ */
+public class CircularlyLinkedList<T> {
+    
+    private ListNode cur;
+    private ListNode prev;
+    private int size; 
+    
+    /**
+     *  Default constructor.  Creates an empty list
+     */
+    public CircularlyLinkedList() {
+        cur = null;
+        prev = null;
+        size = 0;
+    }
+    
+    /**
+     * Get the size of the list.
+     * @return the number of elements in this list.
+     */
+    public int size() {
+        return size;
+    }
+    
+    /**
+     *  Removes all of the elements from this list.
+     */
+    public void clear() {
+        cur = prev = null;
+        size = 0;
+    }
+    
+    /**
+     *  Add an element after current. After this call, current
+     *  is the element added.
+     *  @param newData the data to add
+     */
+    public void add(T newData) {
+        
+        ListNode newNode = new ListNode(newData); 
+        
+        if (cur == null) {  // add first element to the list
+            cur = newNode;
+            cur.link = cur;
+            prev = cur;
+        } else {           // add element after current to existing list
+            newNode.link = cur.link;
+            cur.link = newNode;
+            prev = cur;
+            cur = newNode;
+        }
+        
+        // increment size of the list
+        size++;  
+    }
+    
+    /**
+     *  Get the data at the current node in this list.
+     *  @return data at current.
+     *  @throws CircularlyLinkedListException if the list is empty
+     */
+    public T getCurrent() throws CircularlyLinkedListException {
+        
+        // Empty list - can't get
+        if (cur == null) {
+            throw new CircularlyLinkedListException
+                ("Attempting to get element from an empty list.");
+        }
+        return cur.data;
+    }
+    
+    /**
+     *  Advance n positions in this list.  After this call, 
+     *  current is n positions farther along the list.
+     *  @param n the number of positions to advance
+     *  @throws CircularlyLinkedListException if the list is empty
+     */
+    public void advance(int n) throws CircularlyLinkedListException {
+        
+        // Empty list - can't advance
+        if (cur == null) {
+            throw new CircularlyLinkedListException
+                ("Attempting to advance in an empty list.");
+        }
+        
+        // Advance n times,setting cur and prev each time
+        for (int i=0; i<n; i++) {
+            prev = cur;
+            cur = cur.link;
+        }
+    }
+    
+    /**
+     *  Advance to element in this list, testing for equality
+     *  using the equals method.  After this call, the node
+     *  containing element is current.
+     *  @param element the element to advance to
+     *  @throws CircularlyLinkedListException if the element is not in the list.
+     */
+    public void advance(T element) throws CircularlyLinkedListException {
+        ListNode position = cur;
+        ListNode beforePos = prev;
+        
+        // Empty list - can't advance
+        if (cur == null) {
+            throw new CircularlyLinkedListException
+                ("Attempting to advance in an empty list.");
+        }
+        
+        // Find the element and set cur and prev accordingly
+        for (int i=0; i<size; i++) {
+            if (position.data.equals(element)) {
+                cur = position;
+                prev = beforePos;
+                return;
+            }
+            beforePos = position;
+            position = position.link;
+        }
+        
+        // If we get here, the element wasn't found
+        throw new CircularlyLinkedListException
+            (element + " not in the list.");
+    }
+    
+    /**
+     *  Remove the current node in this list and return the element
+     *  removed.  After this call, current is the element after the
+     *  removed element.
+     *  @return the deleted element
+     *  @throws CircularlyLinkedListException if the list is empty
+     */
+    public T remove() throws CircularlyLinkedListException {
+        
+        T rval = null;
+        
+        // Empty list - nothing to delete
+        if (cur == null) {
+            throw new CircularlyLinkedListException
+                ("Attempting to remove from an empty list.");
+        }
+        
+        if (cur.link == cur) {
+            // Only 1 element in this list
+            rval = cur.data;
+            cur = null;
+            prev = null;
+        } else {
+            // More than 1 element in this list
+            rval = cur.data;
+            cur = cur.link;
+            prev.link = cur;
+        }
+        
+        // Decrement size
+        size--;
+        
+        return rval;
+    }
+    
+    /**
+     *  Get a string representation of this list, starting at
+     *  the current element.
+     *  @return a string representation of this list.
+     */
+    public String toString() {
+        
+        String rval = "";
+        ListNode position = cur;
+        
+        for (int i=0; i<size; i++) {
+            rval += position.data + " ";
+            position = position.link;
+        }
+        
+        return rval;
+    }
+    
+    private class ListNode {
+        private T data;
+        private ListNode link;
+        
+        public ListNode() {
+            data = null;
+            link = null;
+        }
+        public ListNode(T newData) {
+            data = newData;
+            link = null;
+        }
+        public ListNode(T newData, ListNode aLink) {
+            data = newData;
+            link = aLink;
+        }
+    }
+}
+
+
+----Iterator<T> Interface
+The Scanner class implements this interface
+
+public T next(); (returns an object)
+public boolean hasNext();
+
+import java.util.*;
+public class LinkedList<T> {
+private ListNode head;
+
+public Iterator<T> iterator() {
+return new LinkedListIterator();
+}
+
+private class LinkedListIterator
+implements Iterator<T> {
+private ListNode current;
+private LinkedListIterator() {
+current = head;
+}
+public boolean hasNext() { ... }
+public T next() { ... }
+public void remove() { ... }
+}
+
+
+//examples implementing an iterator
+LinkedList<String> list = new LinkedList<String>();
+list.add(“Hello”);
+list.add(“you”);
+list.add(“there”);
+Iterator<String> iter = list.iterator();
+while (iter.hasNext()) {
+System.out.println(iter.next());
+}
+
+------------------------------Hashing------------------------
+
+The Object class defnes the method hashCode(), which computes the hashcode and returns it as an int.
+
+public class Word1 {
+private String form;
+private int frequency;
+< constructors, etc >
+
+public boolean equals(Object otherObj) {
+// two words are equal if they have same form
+if (otherObj == null)
+return false;
+if (getClass() != otherObj.getClass())
+return false;
+Word1 otherWord = (Word1) otherObj;
+return (form.equals(otherWord.form) 
+&& (frequency == otherWord.frequency));
+}
+
+public int hashCode() {
+return form.hashCode() + frequency;
+// or: form.hashCode() * frequency;
+}
+}
+
+
+----HashMap<K,V>
+HashMap<String, String> phonebook = new HashMap<String, String>(150);
+phonebook.put(“Joe”, “12345”);
+phonebook.put(“Sam”, “54321”);
+phonebook.put(“Kathy”, “11111”);
+String samsNumber = phonebook.get(“Sam”);
+String timsNumber = phonebook.get(“Tim”);
+if (phonebook.containsKey(“Mike”)){}
+phonebook.remove(“Joe”);
+
+// for each key in the map's keyset
+for (String key : phonebook.keySet()) {
+value = phonebook.get(key);
+System.out.println(key + “ “ + value);
+}
+
+// for each entry in the map
+for (Map.Entry<String,String> entry : phonebook.entrySet()) {
+key = entry.getKey();
+value = entry.getValue();
+System.out.println(key + “ “ + value);
+}
+
+ArrayLists, LinkedLists, and HashMaps all implement the serializable interface (possible to save to a binary file)
+
+
+try {
+ObjectOutputStream out = new ObjectOutputStream(
+new FileOutputStream("myFile"));
+out.writeObject(myHashMap);
+out.close();
+} catch (IOException e) {
+System.out.println(e.getMessage());
+}
+
+File inputFile = new File("myFile");
+try {
+if (inputFile.exists()) {
+ObjectInputStream in = new ObjectInputStream(
+new FileInputStream(inputFile));
+myHashMap = (HashMap<String,String>) in.readObject();
+in.close();
+}
+} catch (IOException e) {
+System.out.println(e.getMessage());
+} catch (ClassNotFoundException e) {
+System.out.println(e.getMessage());
+}
+
+
+
+----Selftest HashMap Frequencies Constructor
+/**
+     * Constructor
+     *
+     * @param filename
+     * @throws FileNotFoundException
+     */
+    public Frequencies(String filename) throws FileNotFoundException {
+        Scanner sc = new Scanner(new File(filename), "UTF-8");
+        String word;
+        int i = 0;
+
+        while (sc.hasNext()) {
+            word = sc.next().toUpperCase();
+            word = deleteMarks(word);
+
+            if (word.length() > 0) {
+                numberOfWordTokens++;
+
+                if (wf.containsKey(word)) {
+                    i = wf.get(word);
+                    i++;
+                    wf.put(word, i);
+                } else {
+                    wf.put(word, 1);
+                } // if else ..
+            } // if
+        } // while
+
+        Iterator it = wf.entrySet().iterator();
+
+        while (it.hasNext()) {
+            Map.Entry<String, Integer> me = (Map.Entry<String, Integer>) it.next();
+            String key = me.getKey();
+            int value = me.getValue();
+
+            if (value > maxOccurrences) {
+                maxOccurrences = value;
+            }
+
+            if (fcluster.containsKey(value)) {
+                fcluster.get(value).add(key);
+            } else {
+                ArrayList<String> myList = new ArrayList();
+                myList.add(key);
+                fcluster.put(value, myList);
+            }
+        } //while
+    } // constructor
+
+
+
+----Lab HashMap dictBuilder
+----Example Scanner, try with resources
+
+    private void dictBuilder (String path) throws IOException, NullPointerException{
+        //read the dictionary with a scanner
+        try(Scanner scanner = new Scanner(new File(path)) ){
+
+            //go over every pair of tokens in the dictionary
+            while (scanner.hasNext()){
+                //extract the word
+                String word = scanner.next();
+                if (scanner.hasNext()){
+                    //extract its pos tag in lower case
+                    String posTag = scanner.next().toLowerCase();
+
+                    //initialize a list of pos tags
+                    List<String> posTags;
+                    //if this word is already contained in the dict, assign its pos tags to the list
+                    if (dict.containsKey(word)){
+                        posTags = dict.get(word);
+                    }else{
+                        //otherwise, make it an empty list
+                        posTags = new ArrayList<>();
+                    }
+                    //add the pos tag of this entry to the list
+                    posTags.add(posTag);
+                    //add the word and list of pos tags to the dict
+                    dict.put(word, posTags);
+                }
+            }
+        }
+    }
+
+----------------------------Swing-------------------------------
+import javax.swing.*;
+import java.awt.event.*;   		// import window adapter
+import java.awt.FlowLayout;		// import a FlowLayout layout manager
+import java.awt.BorderLayout;	// import a BorderLayout layout manager
+import java.awt.GridLayout;		// import a GridLayout layout manager
+import javax.swing.BoxLayout;	// import a BoxLayout layout manager
+import java.awt.Dimension;		// import Dimension
+import javax.swing.JOptionPane;	// import Message dialogs
+import javax.swing.event.*;
+
+public class TestFrame11
+{
+	private JFrame frame;  			// Our toplevel window
+	private JLabel aLabel;  		/* Label to display selection */
+	private JTextField aTextfield; 	// Textfield to get a String */
+	/**
+	 * Constructor for TestFrame11
+	 * The window has a window listener that terminates the application
+	 * when the close window button is clicked. 5 Buttons are displayed
+	 * in a BoxLayout
+	 */
+	TestFrame11()  {				
+		frame = new JFrame("Test Frame 11");
+		frame.setSize(200,120);
+		
+		/* Label to display selection */		
+		aLabel = new JLabel("Nothing selected");
+		aTextfield = new JTextField(40);
+		JButton aButton = new JButton("Change Label");
+		aButton.addActionListener(new aButtonHandler());
+		/*
+			Override JFrames default layout manager.
+		*/
+		
+		BoxLayout aBoxLayout = new BoxLayout(frame.getContentPane(),BoxLayout.Y_AXIS);
+		frame.getContentPane().setLayout(aBoxLayout);
+		
+		/* Add 5 Pixels rigid space between components */
+		frame.getContentPane().add(Box.createRigidArea(new Dimension(0,5)));
+		frame.getContentPane().add(aLabel);
+		frame.getContentPane().add(Box.createRigidArea(new Dimension(0,5)));
+		frame.getContentPane().add(aTextfield);
+		frame.getContentPane().add(Box.createRigidArea(new Dimension(0,5)));
+		frame.getContentPane().add(aButton);
+		
+					
+		frame.addWindowListener(new MyWindowListener());
+				
+		frame.setVisible( true );
+	}
+	
+	/**
+	 * ActionListeners for the JButtons
+	 */
+	private class aButtonHandler implements ActionListener  {
+		public void actionPerformed(ActionEvent e)  {
+			String s = aTextfield.getText();
+			if (s.length() > 0)  {
+				aLabel.setText(s);
+				aTextfield.setText("");
+                JOptionPane.showMessageDialog(frame,"Word is already in list");
+			}
+		}
+	}
+	
+	
+	/**
+	 * Our window listener terminates the program when the close window button 
+	 * is clicked. 
+	 */	
+	private class MyWindowListener extends WindowAdapter {
+		public void windowClosing(WindowEvent e)
+		{
+			System.exit(0);
+		}
+	}
+	
+	/**
+	 * Open a TestFrame11
+	 */
+	public static void main ( String[] args )
+	{
+		TestFrame11 aFrame = new TestFrame11();
+	}  
+}
+
+
+
+----------------------------Java & XML---------------------------------
+
+
+----Load XML with SAX
+
+import org.xml.sax.helpers.DefaultHandler;
+public class ParseXml extends DefaultHandler {
+DefaultHandler handler = new ParseXml();
+SAXParser saxParser = SAXParserFactory.newInstance().newSAXParser();
+saxParser.parse(new File("file.xml"), handler);
+
+//methods reacting on XML events
+public void startDocument()
+
+public void startElement(String namespaceURI,
+String localName, // local name
+String qName, // qualified name
+Attributes attrs){
+if(qName.equals("level1")){
+String temp = attrs.getValue(attrs.getIndex("attr2"));
+//Do something ...
+}
+}
+
+public void endElement(String namespaceURI,
+String localName, // local name
+String qName)
+public void characters(char[] buf, int offset, int len)
+public void endDocument()
+
+
+----Load XML with StAX
+
+import javax.xml.stream.*; //provides XMLEventReader/-factory
+import javax.xml.stream.events.*; //all types of XMLEvents
+
+XMLInputFactory inputFactory = XMLInputFactory.newInstance();
+XMLEventReader eventReader = inputFactory.createXMLEventReader(new StreamSource(new File("file.xml")));
+
+while (eventReader.hasNext()) {
+XMLEvent event = eventReader.nextEvent();
+// process XML event
+...
+
+if (event.isStartElement()){ //prevent class cast exception
+StartElement se = event.asStartElement(); //casting
+System.out.println(se.getName()); //access properties
+}
+if (event.isCharacters()) { //prevent class cast exception
+Characters c = event.asCharacters(); //casting
+System.out.println(c.getData()); //access properties
+}
+}
+
+XMLEvent.getEventType():
+1 StartElement
+2 EndElement
+4 Characters
+5 Comment
+7 StartDocument
+8 EndDocument
+10 Attribute
+
+XMLEvent.isStartElement()
+XMLEvent.isEndElement()
+XMLEvent.isAttribute()
+XMLEvent.isEndDocument()
+XMLEvent.isCharacters()
+
+
+Stack<String> stack = new Stack<String>();
+while (eventReader.hasNext()) {
+XMLEvent event = eventReader.nextEvent();
+
+if (event.isStartElement()) {
+stack.push(event.asStartElement().getName().getLocalPart());
+Iterator<Attribute> it = event.asStartElement().getAttributes();
+while (it.hasNext()) {
+Attribute a = it.next();
+System.out.println(stack + " " + a.getName().getLocalPart()
++ "=\"" + a.getValue() + "\"");
+}
+}
+
+if (event.isCharacters()) {
+String s = event.asCharacters().getData();
+if (s.trim().length() > 0) {
+System.out.println(stack + " \"" + s + "\"");
+}
+}
+
+if (event.isEndElement()) {
+stack.pop();
+}
+}
+
+
+----StAX Writing
+import javax.xml.stream.*; //provides XMLEventReader/-factory
+
+XMLOutputFactory outputFactory = XMLOutputFactory.newInstance();
+XMLEventWriter eventWriter = outputFactory.createXMLEventWriter(
+new FileOutputStream("out.xml"));
+XMLEventFactory eventFactory = XMLEventFactory.newInstance();
+
+StartDocument startDocument = eventFactory.createStartDocument();
+StartElement startRoot = eventFactory.createStartElement(
+"", "", "root");
+Attribute attr1 = eventFactory.createAttribute("attr1", "example");
+EndElement endRoot = eventFactory.createEndElement("", "", "root");
+StartElement startLevel1 = eventFactory.createStartElement(
+"", "", "level1");
+Attribute attr2 = eventFactory.createAttribute("attr2", "abc");
+StartElement startLevel2 = eventFactory.createStartElement(
+"", "", "level2");
+Characters contentLevel2 = eventFactory.createCharacters(
+"Content of level 2");
+EndElement endLevel2 = eventFactory.createEndElement("", "", "level2");
+EndElement endLevel1 = eventFactory.createEndElement("", "", "level1");
+EndDocument endDocument = eventFactory.createEndDocument();
+
+Characters indent = eventFactory.createCharacters("
+");
+Characters newLine = eventFactory.createCharacters("\n");
+writer.add(startDocument);
+writer.add(newLine);
+writer.add(startRoot);
+writer.add(attr1);
+writer.add(newLine);
+writer.add(indent);
+writer.add(startLevel1);
+writer.add(attr2);
+writer.add(newLine);
+writer.add(indent);
+writer.add(indent);
+writer.add(startLevel2);
+writer.add(contentLevel2);
+writer.add(endLevel2);
+writer.add(newLine);
+writer.add(indent);
+writer.add(endLevel1);
+writer.add(newLine);
+writer.add(endRoot);
+writer.add(newLine);
+writer.add(endDocument);
+
+
+----Lab XML Load
+
+
+    /**
+     * load the elements from addressFileName as Address objects into addresses
+     * @throws XMLStreamException
+     * @throws FileNotFoundException
+     */
+    private void load() throws XMLStreamException, FileNotFoundException {
+        XMLInputFactory inputFactory = XMLInputFactory.newInstance();
+        XMLEventReader eventReader = null;
+
+        try{
+            //create a eventReader of the xml file
+            eventReader = inputFactory.createXMLEventReader(new StreamSource(new File(addressFileName)));
+            Address address = new Address();
+
+            //loop through the events in the xml file
+            while (eventReader.hasNext()) {
+
+                //read the next event from the xml file
+                XMLEvent event = eventReader.nextEvent();
+
+                /**
+                 * If the event is a start element
+                 */
+                if (event.isStartElement()){
+                    StartElement se = event.asStartElement();
+                    if (se.getName().toString().equals("address")){
+                        address = new Address();
+                    }
+
+                    /**
+                     * If the start element is forename, append the value of its next event as forename to the address
+                     */
+                    if (se.getName().toString().equals("forename")){
+                        if (eventReader.hasNext()){
+                            event = eventReader.nextEvent();
+                            if (event.isCharacters()){
+                                address.setForename(event.asCharacters().getData());
+                            }
+                        }
+                    }
+
+                    /**
+                     * If the start element is surname, append the value of its next event as surname to the address
+                     */
+                    if (se.getName().toString().equals("surname")){
+                        if (eventReader.hasNext()){
+                            event = eventReader.nextEvent();
+                            if (event.isCharacters()){
+                                address.setSurname(event.asCharacters().getData());
+                            }
+                        }
+                    }
+
+                    /**
+                     * If the start element is email, append the value of its next event as email to the address
+                     */
+                    if (se.getName().toString().equals("email")){
+                        if (eventReader.hasNext()){
+                            event = eventReader.nextEvent();
+                            if (event.isCharacters()){
+                                address.setEmail(event.asCharacters().getData());
+                            }
+                        }
+                    }
+                }
+
+                /**
+                 * If the event is an end element and its name is dddress, add the address object to addresses
+                 */
+                if (event.isEndElement()){ //prevent class cast exception
+                    EndElement ee = event.asEndElement(); //casting
+                    if (ee.getName().toString().equals("address")){
+                        addresses.add(address);
+                    }
+                }
+            }
+
+        }finally{
+            if (eventReader != null){
+                eventReader.close();
+            }
+
+        }
+    }
+
+
+
+----Lab XML generateXML
+
+/**
+     * write the Address objects in addresses as xml elements to an output stream
+     * @param w the output stream to write Address objects to
+     */
+    private void generateXML(Writer w) {
+        try{
+            //initialize the eventWriter and eventFactory
+            XMLOutputFactory outputFactory = XMLOutputFactory.newInstance();
+            XMLEventWriter eventWriter = outputFactory.createXMLEventWriter(w);
+            XMLEventFactory eventFactory = XMLEventFactory.newInstance();
+
+            //create character events for tab and newline
+            Characters indent = eventFactory.createCharacters("\t");
+            Characters newLine = eventFactory.createCharacters("\n");
+
+            //add start of document
+            eventWriter.add(eventFactory.createStartDocument());
+            eventWriter.add(newLine);
+
+            //add start element addressbook
+            eventWriter.add(eventFactory.createStartElement("", "", "addressbook"));
+            eventWriter.add(newLine);
+
+            //loop through Address objects in addresses
+            for (Address ad: addresses){
+                //add start element address
+                eventWriter.add(indent);
+                eventWriter.add(eventFactory.createStartElement("", "", "address"));
+
+                //if the Address object has forename, add forename events (start, characters, end)
+                if(ad.getForename() != null){
+                    eventWriter.add(newLine);
+                    eventWriter.add(indent);
+                    eventWriter.add(indent);
+
+                    eventWriter.add(eventFactory.createStartElement("", "", "forename"));
+                    eventWriter.add(eventFactory.createCharacters(ad.getForename()));
+                    eventWriter.add(eventFactory.createEndElement("", "", "forename"));
+                }
+
+                //if the Address object has surname, add surname events (start, characters, end)
+                if(ad.getSurname() != null){
+                    eventWriter.add(newLine);
+                    eventWriter.add(indent);
+                    eventWriter.add(indent);
+
+                    eventWriter.add(eventFactory.createStartElement("", "", "surname"));
+                    eventWriter.add(eventFactory.createCharacters(ad.getSurname()));
+                    eventWriter.add(eventFactory.createEndElement("", "", "surname"));
+                }
+
+                //if the Address object has email, add email events (start, characters, end)
+                if(ad.getEmail() != null){
+                    eventWriter.add(newLine);
+                    eventWriter.add(indent);
+                    eventWriter.add(indent);
+
+                    eventWriter.add(eventFactory.createStartElement("", "", "email"));
+                    eventWriter.add(eventFactory.createCharacters(ad.getEmail()));
+                    eventWriter.add(eventFactory.createEndElement("", "", "email"));
+                }
+
+                //add end element address
+                eventWriter.add(newLine);
+                eventWriter.add(indent);
+                eventWriter.add(eventFactory.createEndElement("", "", "address"));
+                eventWriter.add(newLine);
+            }
+
+
+            //add end element addressbook
+            EndElement endRoot = eventFactory.createEndElement("", "", "addressbook");
+            eventWriter.add(endRoot);
+
+            //add end document
+            eventWriter.add(newLine);
+            EndDocument endDocument = eventFactory.createEndDocument();
+            eventWriter.add(endDocument);
+
+        } catch(XMLStreamException e){
+            System.out.println(e.getMessage());
+            System.exit(0);
+        }
+    }
+}
+
+
+----DOM Parsing
+
+
+import javax.xml.parsers.*; //provides DocumentBuilder/-factory
+import org.w3c.dom.*; //the Document and many more tools
+DocumentBuilderFactory fac = DocumentBuilderFactory.newInstance();
+DocumentBuilder builder = fac.newDocumentBuilder();
+Document document = builder.parse(new File("file.xml"));
+
+
+private void visitNode(Node node) {
+// process node...
+// iterate over all children of a node
+for (int i = 0; i < node.getChildNodes().getLength(); i++) {
+// recursively visit all child nodes
+visitNode(node.getChildNodes().item(i));
+}
+}
+
+visitNode(document.getDocumentElement());
+
+
+short Node.getNodeType():
+1: element node
+2: attribute node
+3: text node
+4: cdata
+8: comment
+
+
+//read the whole document with DOM
+private static void visitNode(Node node) {
+
+if (node.getNodeType() == 1) {
+System.out.print("\n" + node.getNodeName() + ": ");
+NamedNodeMap attributes = node.getAttributes();
+if (attributes != null) {
+for (int i = 0; i < attributes.getLength(); i++) {
+System.out.print(attributes.item(i) + " ");
+}
+}
+}
+
+if (node.getNodeType() == 3 && !node.getTextContent().trim().isEmpty()) {
+System.out.print("\"" + node.getTextContent().trim() + "\"");
+}
+
+NodeList nodeList = node.getChildNodes();
+for (int i = 0; i < nodeList.getLength(); i++) {
+visitNode(nodeList.item(i));
+}
+}
+
+
+----Writing with DOM
+
+DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+Document document = documentBuilder.newDocument();
+
+// First, we create all the necessary elements:
+Element root = document.createElement("root");
+root.setAttribute("attr1", "example");
+Element level1 = document.createElement("level1");
+level1.setAttribute("attr2", "abc");
+Element level2 = document.createElement("level2");
+level2.setTextContent("Content of level 2");
+
+// Appending the children in bottom-up-order:
+level1.appendChild(level2);
+root.appendChild(level1);
+document.appendChild(root);
+
+----Transform a DOM tree to a String
+Import
+import
+import
+import
+import
+import
+java.io.*;
+javax.xml.transform.Transformer;
+javax.xml.transform.TransformerFactory;
+javax.xml.transform.OutputKeys;
+javax.xml.transform.stream.StreamResult;
+javax.xml.transform.dom.DOMSource;
+TransformerFactory transformerFactory = TransformerFactory.newInstance();
+transformerFactory.setAttribute("indent-number", 4);
+Transformer transformer = transformerFactory.newTransformer();
+transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
+transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+StringWriter stringWriter = new StringWriter();
+StreamResult result = new StreamResult(stringWriter);
+DOMSource source = new DOMSource(document);
+transformer.transform(source, result);
+String xml = writer.toString();
+Writer writer = new BufferedWriter(new OutputStreamWriter(new
+FileOutputStream(new File("out.xml"))));
+writer.write(xml);
+writer.close();
+
+
+
+---------------------------------Stacks and Queues---------------------------------
+
+----Stacks
+Stack<String> myStack = new Stack<String>();
+String name = null;
+
+myStack.push(“Greg”);
+myStack.push(“Marsha”);
+myStack.push(“Peter”);
+myStack.push(“Jan”);
+name = myStack.pop();
+name = myStack.pop();
+name = myStack.pop();
+myStack.push(“Bobby”);
+myStack.push(“Cindy”);
+name = myStack.peek();
+
+
+----LinkedStack<T>
+
+public class LinkedStack<T> implements StackADT<T> {
+ private LinearNode<T> top;
+ private int count;
+ 
+ public void push(T element) {
+ LinearNode<T> temp = new LinearNode<T>(element);
+ temp.setNext(top);
+ top = temp;
+ count++;
+ }
+
+public T pop() {
+ if (isEmpty())
+ throw new EmptyStackException();
+ T result = top.getElement();
+ top = top.getNext();
+ count--;
+ return result;
+ }
+}
+
+
+----Queue
+
+
+Queue<String> myQueue = new Queue<String>();
+String name = null;
+myQueue.enqueue(“Greg”);
+myQueue.enqueue(“Marsha”);
+myQueue.enqueue(“Peter”);
+myQueue.enqueue(“Jan”);
+name = myQueue.dequeue();
+name = myQueue.dequeue();
+name = myQueue.dequeue();
+myQueue.enqueue(“Bobby”);
+myQueue.enqueue(“Cindy”);
+name = myQueue.first();
+
+public interface QueueADT<T> {
+// Add a new entry to the back of the queue.
+public void enqueue(T element);
+// Remove and return the front element
+public T dequeue();
+// Return (don't remove) the front element
+public T first();
+// Return true if the queue is empty,false otherwise
+public boolean isEmpty();
+// Remove all entries from the queue.
+public int size();
+// Return a string representation of the queue
+public String toString();
+}
+
+public class LinkedQueue<T> implements QueueADT<T> {
+<Instance variables and Constructors>
+public void enqueue(T element) {
+LinearNode<T> node = new LinearNode<T>(element);
+if (isEmpty())
+front = node;
+else
+rear.setNext(node);
+rear = node;
+count++;
+}
+
+public T dequeue() throws EmptyCollectionException {
+if (isEmpty())
+throw new EmptyCollectionException("queue");
+T result = front.getElement();
+front = front.getNext();
+count--;
+if (isEmpty())
+rear = null;
+return result;
+}
+
+
+-------------------------------Lambda-------------------------------
+
+----Example Comparator
+public interface Comparator {
+int compare(Object o1, Object o2);
+boolean equals(Object o);
+}
+class LengthComparator implements Comparator<String>
+{
+public int compare(String first, String second) {
+return Integer.compare(first.length(),
+second.length());
+}
+public boolean equals(Object o) {...}
+}
+Arrays.sort(strings, new LengthComparator());
+}
+
+
+----Example Lambda EventListener
+JButton testButton = new JButton("Test Button");
+testButton.addActionListener(
+e -> System.out.println("Click Detected")
+);
+
+
+----Example Lambda Comparable 
+List < String > stringList = new ArrayList<String>();
+stringList.add(“John”);
+..
+Collections.sort (stringList,
+(String s1, String s2 ) -> s2.compareTo(s1)) ;
+
+----predifined interfaces
+//predefined functional interfaces in java.util.functions.
+Supplier<T> T get()
+Consumer<T> accept(T t)
+Predicate<T> boolean test(T t)
+Function<T,R> R apply(T t)
+BiConsumer<T,U> accept(T t, U u)
+BiFunction<T,U,R> R apply(T t,U u)
+
+----Example Predicate matcher
+
+if (matcher.test(fileOrDir.getName())) {
+            entryList.add(fileOrDir.getAbsolutePath());
+        }
+
+----create your own interfaces
+public interface DumpPrinter {
+    public void doIt();
+}
+DumpPrinter dp = () -> System.out.println("I am dumb");
+dp.doIt();
+
+
+----Example method references (sort using Comparator)
+//java.util.Arrays has a static method public static <T> void sort(T[] a, Comparator <T> c);
+
+Arrays.sort(myIntArray, Integer::compare)
+
+//same as:
+Arrays.sort(myIntArray, (i1, i2) -> {
+return i1.compareTo(i2);
+});
+
+
+-----------------------------Stream-----------------------------
+
+----Getting a stream
+
+Arrays.stream(Object[])
+BufferedReader.lines()
+Files.list()
+
+----intermediate operations
+map()
+filter()
+distinct()
+sorted()
+peek()
+flatMap()
+
+----terminal operations
+reduce()
+collect()
+forEach()
+
+
+----Strean Example
+
+public static void pipe7Test() {
+String sa[] = {"a1", "a6", "a3", "a8", "a9"};
+int summe = Arrays.stream(sa)
+.map(s -> s.substring(1))
+.map(s -> Integer.parseInt(s))
+.filter(i -> i > 6)
+.reduce(0, Integer::sum);
+System.out.println("Summe: " + summe);
+}
+
+
+----Selftest searchWithStreams
+    /*
+     Search word form {@code needle} in corpus. Return a list of tags of word from.
+     */
+    protected List<Word> searchWithStreams(String needle) {
+        return corpus.stream()
+                .filter(w -> w.getForm().equals(needle))
+                .collect(Collectors.toList());
+    }
+
+----------------------------------Recursion---------------------------
+
+public void displayAsWords(int n) {
+if (n < 10) {
+System.out.print(getWordFromDigit(n) + “ “);
+} else {
+displayAsWords(n/10);
+System.out.print(getWordFromDigit(n%10) + “ “);
+}
+}
+
+----Example Recursion returning a value
+public static int numZeros(int n) {
+if (n == 0) {
+//n has one digit that is 0 (base case)
+return 1;
+} else if (n < 10) {
+//n has one digit that is not 0 (base case)
+return 0;
+} else if (n%10 == 0) {
+//last digit is 0 (recursive call)
+return (numZeros(n/10) + 1);
+} else {
+//last digit is not 0 (recursive call)
+return (numZeros(n/10));
+}
+
+----One more Example
+public static String reverse(String s) {
+// base case: string is length 0 or 1
+if (s.length() <= 1)
+return s;
+// reverse all but the first character
+// then add the first character to the end
+return reverse(s.substring(1)) + s.charAt(0);
+}
+
+
+----Binary Search Example
+private int search(target, first, last) {
+int mid, result=-1;
+if (first <= last) {
+mid = (0+9)/2 = 4
+mid = (first + last)/2;
+if (target == a[mid]) {
+result = mid;
+} else if (target < a[mid]) {
+result = search(target, first, mid-1);
+} else {
+result = search(target, mid+1, last);
+}
+}
+return result;
+}
+
+
+----Merge Sort Pseudocode
+
+Base case: If the array a has only 1 element
+(a.length == 1)
+stop, a is of length 1, so it is already sorted
+Otherwise (recursive case):
+Divide the input array a into two halves
+- copy the frst half of the elements into
+an array called front
+- copy the second half of the elements into
+an array called tail
+Sort array front recursively
+Sort array tail recursively
+Merge the arrays front and tail into a
+
+
+----Selftest fileNameFinder
+package de.uni.tuebingen.sfs.java2;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
+public class FilenameFinder {
+    /**
+     * Collect file or directory names equal to {@code entryName} and store the absolute pathname to the found entry
+     * in a List. Start the collection at path {@code path}. If {@code path} is a directory continue collection
+     * in its sub directories.
+     * @param entryName Name to search for
+     * @param path root of search
+     * @return List with found items or empty list if nothing was found.
+     */
+    public static List<String> findEntryAtPath(String entryName, String path) {
+        List<String> entryList = new ArrayList<>();
+
+        File fileOrDir = new File(path);
+
+        // Collect all entries into entryList
+        realFind(entryList, entryName, fileOrDir);
+
+        return entryList;
+    }
+
+    private static void realFind(List<String> entryList, String entryName, File fileOrDir) {
+        // If name matches add absolute path to list
+        if (fileOrDir.getName().equals(entryName)) {
+            entryList.add(fileOrDir.getAbsolutePath());
+        }
+
+        // if entry is a directory search all directory members for entryName
+        if (fileOrDir.isDirectory()) {
+            File[] directoryList = fileOrDir.listFiles();
+
+            if (directoryList == null) {
+                return;
+            }
+
+            for (File currentFile : directoryList) {
+                realFind(entryList, entryName, currentFile);
+            }
+        }
+    }
+}
+
+
+----Selftest Handshake
+    /**
+     * Count the total number of handshakes when there are n people in the room, where
+     * each person shakes hand with everyone else in the room
+     * @param n number of people in the room
+     * @return total number of handshakes
+     */
+public static int handshake(int n) {
+        if (n < 0)
+            throw new IllegalArgumentException("n must be positive");
+        
+        if (n <= 1)
+            return 0;
+        
+        return (n-1) + handshake(n-1);
+    }
+
+
+----Selftest Pascal
+    /**
+     * Return the row of pascal's triangle in an array
+     * @param n the row of the pascal's triangle
+     * @return an array of integers that are elements in n-th row in pascal's triangle
+     */
+public static int[] pascal(int n) {
+        if (n < 0) 
+            throw new IllegalArgumentException("n must be positive");
+
+        // Base case: row == 0, return {1}
+        if (n == 0) {
+            int[] row = {1};
+            return row;
+        }
+        
+        // Create array for this row (to return) and
+        // set the first and last elements to 1
+        int[] thisRow = new int[n+1];
+        thisRow[0] = thisRow[n] = 1;
+        
+        // Generate the previous row
+        int[] prevRow = pascal(n-1);
+
+        // Get the ith element of thisRow (not including the first and last)
+        // by adding the elements at positions i-1 and i from the previous row.
+        for (int i=1; i<n; i++) {
+            thisRow[i] = prevRow[i-1] + prevRow[i];
+        }
+        
+        return thisRow;
+    }
+
+-----------------------------Runtime exec----------------------------
+
+Runtime runtime = Runtime.getRuntime();
+Process p = runtime.exec("ls");
+
+----Run TreeTagger from Java with Runtime.exec
+Runtime runtime = Runtime.getRuntime();!
+Process process = runtime.exec("/afs/sfs.uni-tuebingen.de/
+lehre/culy/TreeTagger/cmd/tree-tagger-german-utf8 input.txt"); !
+InputStream inStream = process.getInputStream();
+InputStreamReader sReader = new InputStreamReader(inStream);
+BufferedReader bufferedReader = new BufferedReader(sReader);"
+String line;
+while ((line = bufferedReader.readLine()) != null) {
+String word = line.split("\t")[0];
+String pos = line.split("\t")[1];
+String lemma = line.split("\t")[2];
+System.out.println(word + "#" + pos + "#" + lemma);
+}
+
+
+---------------------------Methods for sorting----------------------------
+
+----List: default void sort(Comparator<? super E> c)
+
+class SortById implements Comparator<Employee> {  
+// Used for sorting in ascending order of ID  
+public int compare(Employee a, Employee b)  
+    {  
+return a.id - b.id;  
+    }  
+}  
+
+Collections.sort(list, new SortById());  
+
+
+----Interface Comparator<T>
+
+----Stream: sorted(Comparator<? super T> comparator)
+List result = list.stream().sorted((o1, o2)->o1.getItem().getValue().
+                                   compareTo(o2.getItem().getValue())).
+                                   collect(Collectors.toList());
+
+List<String> sortedList = list.stream().sorted().collect(Collectors.toList());
+
+
+//reverse order
+List<String> sortedList = list.stream()
+			.sorted(Comparator.reverseOrder())
+			.collect(Collectors.toList());
+
+
+//sort by age
+List<User> sortedList = users.stream()
+			.sorted(Comparator.comparingInt(User::getAge))
+
+
+//sort by name
+List<User> sortedList = users.stream()
+		.sorted(Comparator.comparing(User::getName))
+		.collect(Collectors.toList());
+			.collect(Collectors.toList());
+

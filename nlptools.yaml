@@ -1,0 +1,22 @@
+Corenlp: 
+#output saved as stackoverflow.txt.out
+jia@jia-HP-255-G8-Notebook-PC:~/Downloads/stanford-corenlp-4.2.2$ java -cp "*" -Xmx5g edu.stanford.nlp.pipeline.StanfordCoreNLP -file ../stackoverflow.txt
+
+#output saved as stackoverflow.txt.conll
+jia@jia-HP-255-G8-Notebook-PC:~/Downloads/stanford-corenlp-4.2.2$ java -cp "*" -Xmx5g edu.stanford.nlp.pipeline.StanfordCoreNLP -file ../stackoverflow.txt -outputFormat conll
+
+opennlp:
+#sentence segmentation
+jia@jia-HP-255-G8-Notebook-PC:~/Downloads/opennlp-master$ bin/opennlp SentenceDetector models/en-sent.bin < ../stackoverflow.txt
+
+#tokenization
+jia@jia-HP-255-G8-Notebook-PC:~/Downloads/opennlp-master$ bin/opennlp TokenizerME models/en-token.bin < ../stackoverflow.txt
+
+#pipeline: sentence segmentation-tokenization
+jia@jia-HP-255-G8-Notebook-PC:~/Downloads/opennlp-master$ bin/opennlp SentenceDetector models/en-sent.bin < ../stackoverflow.txt | bin/opennlp TokenizerME models/en-token.bin 
+
+#pipeline: sentence segmentation-tokenization-pos tagging
+jia@jia-HP-255-G8-Notebook-PC:~/Downloads/opennlp-master$ bin/opennlp SentenceDetector models/en-sent.bin < ../stackoverflow.txt | bin/opennlp TokenizerME models/en-token.bin | bin/opennlp POSTagger models/en-pos-maxent.bin
+
+#parsing
+jia@jia-HP-255-G8-Notebook-PC:~/Downloads/opennlp-master$ bin/opennlp Parser models/en-parser-chunking.bin < ../stackoverflow.txt
