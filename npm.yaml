@@ -1,0 +1,18 @@
+create a new react app:
+npx create-react-app appName
+
+start the development server:
+cd appName
+npm start
+
+install axios:
+npm install axios
+
+install json server:
+npm install json-server --save-dev
+# add the following to the scripts part of the package.json file
+"server": "json-server -p3001 --watch db.json"
+# create a db.json file under the root directory
+npm run server
+
+
