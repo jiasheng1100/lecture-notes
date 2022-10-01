@@ -15,4 +15,48 @@ npm install json-server --save-dev
 # create a db.json file under the root directory
 npm run server
 
+setNotes(notes.concat(response.data)):
+concat does not change the components original state but instead creates a new copy of the list
+
+const changedNote = { ...note, important: !note.important }:
+{ ...note } creates a new object with copies of all the properties from the note object, because the variable note is a reference to an item in the notes array in the component's state, and as we recall we must never mutate state directly in React. The new object changedNote is only a shallow copy.
+
+NodeJS: 
+a JavaScript runtime based on Googles Chrome V8 JavaScript engine.
+node -v: check node version
+node: get interactive node-repl (in command line)
+
+babel: 
+browsers don't yet support the newest features of JavaScript, and that is why the code running in the browser must be transpiled with e.g. babel. 
+
+npm: 
+originates from the Node ecosystem. A tool used for managing JavaScript packages.
+
+npm init: create a template for application
+package.json: contains info about the project
+node index.js: run the program directly with Node
+# add ' "start": "node index.js", ' to the package.json file to make the following command work
+npm start: run the program as an npm script
+npm test: testing library
+
+express:
+library to ease server side development with Node by offering a more pleasing interface to work with the built-in http modules
+
+npm install express: define express as a project dependency
+npm update: update the dependencies of the project
+npm install: install all up-to-date dependencies fo the project defined in package.json
+
+nodemon: 
+watches the files in the directory in which nodemon was started, and automatically restarts the node application if any file changes.
+npm install --save-dev nodemon: install nodemon by defining it as a development dependency
+development dependencies: tools that are needed only during the development of the application, not when the application is run in production mode on the production server
+# add ' "dev": "nodemon index.js", ' to the scripts in package.json file to make the following command work
+npm run dev: start the server in the development mode
+
+REST:
+- Representational State Transfer, an architectural style meant for building scalable web applications
+- Singular things are called resources
+- Every resource has an associate URL which is the resources unique address
+- Combine the name of the resource type with the resources unique identifier to create the unique address for resources. e.g. www.example.com/api/notes
+
 
